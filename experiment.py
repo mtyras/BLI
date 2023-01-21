@@ -1,4 +1,4 @@
-from . import models
+import models
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
@@ -318,7 +318,7 @@ class Exp:
     
       return result
 
-  def plot(self, params=None, fit=False, correct_offsets=False):
+  def plot(self, params=None, fit=False, correct_offsets=False, backend='pyplot'):
 
     #get params for fit and offsets
     if params is None:
@@ -328,46 +328,51 @@ class Exp:
         correct_offsets = False
       else: params = self.params
 
-    fig, ax = plt.subplots()
-    for dataset in self.datasets:
-      if dataset.use_for_fit == False: continue
-      range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
-      label = f"{dataset.index}: " + ' '.join([f"{step.concentration:.1E}" for step in dataset.steps])
-      if correct_offsets:
-        response = np.copy(dataset.response)
-        for step in dataset.steps:
-          mask = (dataset.t>=step.start) & (dataset.t<step.stop)
-          offset = params[f'offset_ds{dataset.index}_step{step.index}'].value
-          response[mask] = response[mask] - offset
-      else: response = dataset.response
+    if backend == 'pyplot':
+      fig, ax = plt.subplots()
+      for dataset in self.datasets:
+        if dataset.use_for_fit == False: continue
+        range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
+        label = f"{dataset.index}: " + ' '.join([f"{step.concentration:.1E}" for step in dataset.steps])
+        if correct_offsets:
+          response = np.copy(dataset.response)
+          for step in dataset.steps:
+            mask = (dataset.t>=step.start) & (dataset.t<step.stop)
+            offset = params[f'offset_ds{dataset.index}_step{step.index}'].value
+            response[mask] = response[mask] - offset
+        else: response = dataset.response
 
-      ax.plot(dataset.t[range_mask], response[range_mask], label=label)
-      ax.legend()
+        ax.plot(dataset.t[range_mask], response[range_mask], label=label)
+        ax.legend()
 
-    if fit==False: 
-      return (fig, ax) 
+      if fit==False: 
+        return (fig, ax) 
 
-    #plot fitted response
-    self.recalculate_fit_response()
-    for dataset in self.datasets:
-      if dataset.use_for_fit == False: continue
-      range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
-      label = f"Fitted {dataset.index}"
-      if correct_offsets:
-        fit_response = np.copy(dataset.fit_response)
-        for step in dataset.steps:
-          mask = (dataset.t>=step.start) & (dataset.t<step.stop)
-          offset = self.params[f'offset_ds{dataset.index}_step{step.index}'].value
-          fit_response[mask] = fit_response[mask] - offset
-      else: fit_response = dataset.fit_response
-      
-      ax.plot(dataset.t[range_mask], fit_response[range_mask], color='black', label= label)
-      title = [f"{par.split('_')[0]}: {val.value:.1E}" for par, val in self.params.items() if ('k' in par) or ('ymax' in par)]
-      title = sorted(set(title))
-      title = ' '.join(title)
-      plt.title(title, fontsize=12)
+      #plot fitted response
+      self.recalculate_fit_response()
+      for dataset in self.datasets:
+        if dataset.use_for_fit == False: continue
+        range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
+        label = f"Fitted {dataset.index}"
+        if correct_offsets:
+          fit_response = np.copy(dataset.fit_response)
+          for step in dataset.steps:
+            mask = (dataset.t>=step.start) & (dataset.t<step.stop)
+            offset = self.params[f'offset_ds{dataset.index}_step{step.index}'].value
+            fit_response[mask] = fit_response[mask] - offset
+        else: fit_response = dataset.fit_response
+        
+        ax.plot(dataset.t[range_mask], fit_response[range_mask], color='black', label= label)
+        title = [f"{par.split('_')[0]}: {val.value:.1E}" for par, val in self.params.items() if ('k' in par) or ('ymax' in par)]
+        title = sorted(set(title))
+        title = ' '.join(title)
+        plt.title(title, fontsize=12)
 
-    return (fig, ax)
+      return (fig, ax)
+
+    if backend == 'plotly': pass
+
+
 
 
   def plot_resids(self):
@@ -586,7 +591,11 @@ class Exp:
   def load_bli_data(self, files):
         df_list = []
         for i, f in enumerate(files):
-            df = pd.read_csv(f, sep=',', skipinitialspace=True, index_col=0, names=['t', f'ds_{i}', f'{i}_steps'], skiprows=1)
+            try:
+              name = f.name
+            except:
+              name = f.split('\\')[-1]
+            df = pd.read_csv(f, sep=',', skipinitialspace=True, index_col=0, names=['t', name, f'{i}_steps'], skiprows=1)
             df_list.append(df)
 
         if len(df_list)>1: df = pd.concat(df_list, axis=1)
@@ -627,14 +636,9 @@ class Exp:
                     exp.datasets[ds_index].add_step(start=start, stop=stop, concentration=0)
                     if j == len(step_names)-2: 
                       exp.datasets[ds_index].steps[-1].type = 'Association'
-                      #remove when done testing
-                      concs = [0, 0.2, 1, 2, 4, 8, 16, 32, 64, 4, 0.5, 64, 0, 1, 8]
-                      concs = [c*1e-6 for c in concs]
-                      c = concs[ds_index]
-                      exp.datasets[ds_index].steps[-1].concentration = c
                     if j == len(step_names)-1: exp.datasets[ds_index].steps[-1].type = 'Dissociation'
 
-        df = df[[col for col in df if 'ds' in col]] #discard 'steps' column
+        #df = df[[col for col in df if 'ds' in col]] #discard 'steps' column
 
 
 
