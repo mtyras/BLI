@@ -1,4 +1,4 @@
-import models
+from . import models
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
