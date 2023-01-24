@@ -260,7 +260,7 @@ class Heterogeneous_ligand:
       return [dL1A, dL2A]
 
 
-class One_to_two:
+class Bivalent_ligand:
   name = 'One to two'
   latex = r'''
   L + A = LA
@@ -315,6 +315,116 @@ class One_to_two:
       
       return [dLA, dLAA]
 
+class Triple_sites:
+#no mtl for now
+#note: that this model assumes that the binding of the analyte to one subunit of the ligand 
+# does not affect the binding of the analyte to other subunits of the ligand, and also 
+# assumes that the binding site on each subunit is independent.
+
+  name = 'Triple_sites'
+
+  no_ODEs = 3
+  signal_components = 3
+
+  def __init__(self):
+    self.params_definitions = {
+      'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
+      'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
+      'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax3' : Parameter(name = 'ymax3', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = -1, min = 0, max = 1, user_data = {'type': 'local_step', 'units': 'RU'}),
+    }
+
+  def __repr__(self):
+    return self.name
+
+  def ydot(self, t, y, params, c0, ds_index):
+    ka1 = params['ka1'].value
+    kd1 = params['kd1'].value
+    ka2 = params['ka2'].value
+    kd2 = params['kd2'].value
+    ka3 = params['ka3'].value
+    kd3 = params['kd3'].value
+    try:
+      ymax1 = params[f'ymax1_ds{ds_index}'].value
+      ymax2 = params[f'ymax2_ds{ds_index}'].value
+      ymax3 = params[f'ymax3_ds{ds_index}'].value
+    except:
+      ymax1 = params[f'ymax1'].value
+      ymax2 = params[f'ymax2'].value
+      ymax3 = params[f'ymax3'].value
+
+    if 'kt' in params: 
+      include_mtl = True
+      kt = params['kt'].value
+    else: 
+      include_mtl = False
+    Abulk = c0
+
+
+
+    [L1A, L2A, L3A] = y
+    L1 = ymax1 - L1A
+    L2 = ymax2 - L2A
+    L3 = ymax3 - L3A
+    
+    dL1A = ka1*L1*Abulk - kd1*L1A
+    dL2A = ka2*L2*Abulk - kd2*L2A
+    dL3A = ka3*L3*Abulk - kd3*L3A
+    
+    return [dL1A, dL2A, dL3A]
+
+
+class Trivalent_ligand:
+  name = 'trivalent_ligand'
+
+  no_ODEs = 3
+  signal_components = 3
+
+  def __init__(self) -> None:
+    self.params_definitions = {
+      'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
+      'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+    }
+  def __repr__(self):
+    return self.name
+
+  def ydot(self, t, y, params, c0, ds_index):
+    ka1 = params['ka1'].value
+    kd1 = params['kd1'].value
+    ka2 = params['ka2'].value
+    kd2 = params['kd2'].value
+    ka3 = params['ka3'].value
+    kd3 = params['kd3'].value
+
+    try:
+        ymax = params[f'ymax_ds{ds_index}'].value
+    except:
+        ymax = params['ymax'].value
+    
+    [LA, LAA, LAAA] = y
+    L = ymax - LA - LAA - LAAA
+    Abulk = c0
+
+    dLA = ka1*L*Abulk - kd1*LA - ka2*LA*Abulk + kd2*LAA 
+    dLAA = ka2*LA*Abulk - kd2*LAA -ka3*LAA*Abulk + kd3*LAAA
+    dLAAA = ka3*LAA*Abulk - kd3*LAAA
+
+    
+    return [dLA, dLAA, dLAAA]
 
 def create_params(exp, model, mtl = False, offsets = False):
   """Returns params for a given model \

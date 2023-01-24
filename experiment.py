@@ -296,6 +296,38 @@ class Exp:
     self.recalculate_fit_response()
     return result.message #remove when done testing
 
+
+  def format_si_prefix(self, n):
+    """
+    Format a number using an SI prefix and return a string representation of the number with an SI prefix
+    """
+    prefixes=['a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+    unit='M'
+
+    sign = np.sign(n)
+    absn = abs(n)
+    i = 6 # n >=1 and n<1000
+
+    if absn == 0:
+        return '0'
+    elif absn>0 and absn<=1:
+        while absn<1:
+            absn *= 1000
+            i -= 1
+    elif absn>=1 and absn<1000:
+        return f"{sign*absn}{unit}"
+    else:
+        while absn >= 1000:
+            absn /= 1000
+            i += 1
+    
+    if i>=0 and i<len(prefixes):
+        return f"{sign*absn:.3f}{prefixes[i]}{unit}"
+    else:
+        print('#', sign, absn, i)
+        return f"{n:.3e}{unit}"
+
+
   def calculate_confidence_intervals(self): 
       mini = Minimizer(self.residuals, self.params, nan_policy='omit')
       result = self.result
@@ -303,37 +335,86 @@ class Exp:
       return ci
 
   def posterior_probability(self, burn=300, steps=500, thin=20, is_weighted=False, progress=True):
+      """
+      Returns posterior probability distribution of parameters calculated with mcee
+      """
       params = self.params.copy()
 
       mini = Minimizer(self.residuals, params, nan_policy='omit')
       result = mini.minimize(method='emcee', burn=burn, steps=steps, thin=thin, is_weighted=is_weighted, progress=progress)
-
-      fig = corner.corner(result.flatchain, 
-                              labels=result.var_names,
-                              truths=list(result.params.valuesdict().values()),
-                              quantiles=(0.16, 0.84),
-                              use_math_text=True,)
-      
-      fig.savefig('./output/emcee_plot.png')
     
       return result
 
-  def plot(self, params=None, fit=False, correct_offsets=False, backend='pyplot'):
+  def plot_corner(emcee_result):
+      """
+      Plots the parameter covariances returned by emcee using corner.
+      Returns corner figure.
+      """
 
-    #get params for fit and offsets
-    if params is None:
-      if self.params is None:
-        print("Exp.params is None. Fit and offset plots are not available")
-        fit = False
-        correct_offsets = False
-      else: params = self.params
+      fig = corner.corner(emcee_result.flatchain, 
+                          labels=emcee_result.var_names,
+                          truths=list(emcee_result.params.valuesdict().values()),
+                          quantiles=(0.16, 0.84),
+                          use_math_text=True,)
+      
+      #fig.savefig('./output/emcee_plot.png')
+      
+      return fig
 
-    if backend == 'pyplot':
+  def format_label(self, dataset, labels):
+    """Return a string consisting of dataset name with or without step concentrations"""
+    s = []
+    s.append(dataset.name)
+    for step in dataset:
+      if step.concentration > 0:
+        s.append(self.format_si_prefix(step.concentration))
+    
+    if labels == 'names':
+      return s[0]
+    elif labels == 'concentrations':
+      return ' '.join(s[1:])
+    else:
+      if labels != 'both': print(f'Unknown argument {labels}. Reverting to both.')
+      return ' '.join(s)
+      
+
+  def plot(self, fit = False, correct_offsets = False, use = 'pyplot', labels = 'both'):
+    """
+        Return sensorgram figure.
+    
+        Parameters
+        ----------
+        fit : boolean
+            whether fitted curves should be included
+        correct_offsets : boolean
+            whether offsets should be corrected
+        use : string
+            what backend should be used for plotting
+            must be one of: 'pyplot', 'plotly'
+            default is 'pyplot'
+        labels : string
+            determines labels on the plot.
+            must be one of: 'names' (dataset names), 
+                            'concentrations' (list of non zero concentrations used in dataset)
+                            'both'
+
+        Returns
+        -------
+        Figure object.
+    """
+
+    if self.params is None:
+      print("Exp.params is None. Fit and offset plots are not available")
+      fit = False
+      correct_offsets = False
+    else: params = self.params
+
+    if use == 'pyplot':
       fig, ax = plt.subplots()
       for dataset in self.datasets:
         if dataset.use_for_fit == False: continue
         range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
-        label = f"{dataset.index}: " + ' '.join([f"{step.concentration:.1E}" for step in dataset.steps])
+        label = self.format_label(dataset, labels)
         if correct_offsets:
           response = np.copy(dataset.response)
           for step in dataset.steps:
@@ -341,10 +422,11 @@ class Exp:
             offset = params[f'offset_ds{dataset.index}_step{step.index}'].value
             response[mask] = response[mask] - offset
         else: response = dataset.response
-
+        
         ax.plot(dataset.t[range_mask], response[range_mask], label=label)
-        ax.legend()
-
+      
+      plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+      
       if fit==False: 
         return (fig, ax) 
 
@@ -370,10 +452,7 @@ class Exp:
 
       return (fig, ax)
 
-    if backend == 'plotly': pass
-
-
-
+    if use == 'plotly': pass
 
   def plot_resids(self):
     fig, axs = plt.subplots(self.no_datasets + 1)
