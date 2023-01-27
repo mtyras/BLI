@@ -8,7 +8,7 @@ from copy import copy
 #  (units RU·M-1 · s-1):
 # where G is the conversion factor from surface concentration to RU. The value of G is 
 # approximately 10^9
-#  for proteins on Sensor Chip CM5.
+#  for proteins on Sensor Chip CM5
 
 import sys, inspect
 def get_models_dict():
