@@ -26,7 +26,7 @@ This code will be merged with another project. Eventually it will be published b
     exp.plot()
 
     #assign model and create params
-    exp.model = models.one_to_one()
+    exp.model = one_to_one()
     exp.create_params(offsets=False, mtl=False)
 
     #fit data to model
