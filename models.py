@@ -426,7 +426,7 @@ class Trivalent_ligand:
     
     return [dLA, dLAA, dLAAA]
 
-def create_params(exp, model, mtl = False, offsets = False):
+def create_params(exp, model, mtl = False, offsets = False, ymax = 'local_dataset'):
   """Returns params for a given model \
       must receive info on exp structure including number of datasets and steps."""
           
@@ -437,6 +437,11 @@ def create_params(exp, model, mtl = False, offsets = False):
   for parname, par in params_definitions.items():
     if par.name == 'kt' and mtl == False: continue
     if par.name == 'offset' and offsets == False: continue
+    if 'ymax' in parname and ymax != 'local_dataset':
+      if ymax not in ['global', 'local_dataset']:
+        raise ValueError('ymax can only be fitted globaly or localy')
+      par.user_data['type'] = ymax
+
 
     if par.user_data['type'] == "global":
       params.add(par)
