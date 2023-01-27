@@ -11,7 +11,7 @@ from copy import copy
 #  for proteins on Sensor Chip CM5
 
 import sys, inspect
-def get_models_dict():
+def get_models():
   models_dict = {}
   for name, obj in inspect.getmembers(sys.modules['models']):
       if inspect.isclass(obj) and obj.__module__ == 'models':
@@ -61,7 +61,7 @@ class One_to_one:
 
     #ODE system
     if include_mtl:
-      [LA, Asurf] = y
+      [LA, Asurf] = y 
       L = ymax - LA
       dAsurf = kt*(Abulk - Asurf) - (ka*L*Asurf - kd*LA)
       dLA = ka*L*Asurf - kd*LA
