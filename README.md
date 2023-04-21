@@ -3,8 +3,6 @@
 A set of methods for fitting BLI sensorgram to kinetic models (1:1, bivalent analyte, heterogeneous ligand, two-state).
 LMFIT is used to determine kinetic parameters. Both MCK and SCK are supported. Preprocessing tools, plotting and statistical analysis are included.
 
-This code will be merged with another project. Eventually it will be published but until then all rights are reserved.
-
 **Quick start**
 
     from experiment import *
