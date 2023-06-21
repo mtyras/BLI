@@ -3,8 +3,6 @@
 A set of methods for fitting BLI sensorgram to kinetic models (1:1, bivalent analyte, heterogeneous ligand, two-state).
 LMFIT is used to determine kinetic parameters. Both MCK and SCK are supported. Preprocessing tools, plotting and statistical analysis are included.
 
-This code will be merged with another project. Eventually it will be published but until then all rights are reserved.
-
 **Quick start**
 
     from experiment import *
@@ -26,7 +24,7 @@ This code will be merged with another project. Eventually it will be published b
     exp.plot()
 
     #assign model and create params
-    exp.model = models.one_to_one()
+    exp.model = one_to_one()
     exp.create_params(offsets=False, mtl=False)
 
     #fit data to model
