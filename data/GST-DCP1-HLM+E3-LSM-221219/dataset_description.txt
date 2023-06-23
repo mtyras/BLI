@@ -1,0 +1,18 @@
+Index	Show	Analyze	Ref.	Sample ID	Conc. (uM)	Run time (s)	Shaker speed (rpm)	Integration (ms)	Biosensor Type	Information	Status
+1	1	0	0	blank	0	420	1000	2.3	Anti-GST	calkiem pusty sensor	
+2	1	0	0	blank2		420	1000	2.3	Anti-GST	no bait, 24uM LSM	
+3	1	0	0	blank3		420	1000	2.3	Anti-GST	bait + blank analyte	
+4	1	0	0		24	420	1000	2.3	Anti-GST	sensor ten co poprzednio	
+5	1	0	0	blank4		420	1000	2.2	Anti-GST	no bait, 24uM LSM, czysty sensor	
+6	1	1	0		16	420	1000	2.2	Anti-GST		
+7	1	1	0		8	420	1000	2.2	Anti-GST		
+8	1	1	0		4	420	1000	2.2	Anti-GST		
+9	1	0	0		2	420	1000	2.3	Anti-GST	dysocjacja poszla w pustej tubce	Saturated response
+10	1	1	0		1	420	1000	2.4	Anti-GST	nisko sie zaladowalo	
+11	1	1	0		1	420	1000	2.3	Anti-GST		
+12	1	1	0		2	420	1000	2.4	Anti-GST		
+13	1	1	0		4	420	1000	2.2	Anti-GST		
+14	1	1	0		8	420	1000	2.2	Anti-GST		
+15	1	0	0		16	420	1000	1.9	Anti-GST		
+16	1	1	0		2	420	1000	2.1	Anti-GST		
+17	1	1	0		16	420	1000	2.1	Anti-GST		

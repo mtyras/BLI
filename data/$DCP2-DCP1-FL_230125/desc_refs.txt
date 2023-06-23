@@ -1,0 +1,7 @@
+Index	Show	Analyze	Ref.	Sample ID	Conc. (uM)	Run time (s)	Shaker speed (rpm)	Integration (ms)	Biosensor Type	Information	Status
+1	1	1	0		0.1	510	1000	1.7	SA		
+2	1	1	0		0.2	510	1000	1.7	SA		
+3	1	1	0		0.4	510	1000	1.7	SA		
+4	1	1	0		0.8	510	1000	1.7	SA		
+5	1	1	0		1.6	507	1000	1.7	SA		
+6	1	1	0			510	1000	1.7	SA		
