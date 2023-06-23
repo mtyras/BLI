@@ -331,7 +331,7 @@ class Exp:
   def calculate_confidence_intervals(self): 
       mini = Minimizer(self.residuals, self.params, nan_policy='omit')
       result = self.result
-      ci = conf_interval(mini, result, verbose=True)
+      ci = conf_interval(mini, result, verbose=False)
       return ci
 
   def posterior_probability(self, burn=300, steps=500, thin=20, is_weighted=False, progress=True):
@@ -397,6 +397,7 @@ class Exp:
             must be one of: 'names' (dataset names), 
                             'concentrations' (list of non zero concentrations used in dataset)
                             'both'
+                            'off'
 
         Returns
         -------
@@ -414,7 +415,10 @@ class Exp:
       for dataset in self.datasets:
         if dataset.use_for_fit == False: continue
         range_mask = (dataset.t>=dataset.steps[0].start) & (dataset.t<=dataset.steps[-1].stop)
-        label = self.format_label(dataset, labels)
+        if labels != 'off':
+          label = self.format_label(dataset, labels)
+        else:
+          label = ''
         if correct_offsets:
           response = np.copy(dataset.response)
           for step in dataset.steps:
@@ -445,10 +449,10 @@ class Exp:
         else: fit_response = dataset.fit_response
         
         ax.plot(dataset.t[range_mask], fit_response[range_mask], color='black', label= label)
-        title = [f"{par.split('_')[0]}: {val.value:.1E}" for par, val in self.params.items() if ('k' in par) or ('ymax' in par)]
-        title = sorted(set(title))
-        title = ' '.join(title)
-        plt.title(title, fontsize=12)
+        # title = [f"{par.split('_')[0]}: {val.value:.1E}" for par, val in self.params.items() if ('k' in par) or ('ymax' in par)]
+        # title = sorted(set(title))
+        # title = ' '.join(title)
+        # plt.title(title, fontsize=12)
 
       return (fig, ax)
 
@@ -462,6 +466,7 @@ class Exp:
     
     #all datasets
     for dataset in self.datasets:
+
       resid = dataset.response - dataset.fit_response
       axs[0].plot(dataset.t, resid)
       axs[0].set_title(f"All datasets")

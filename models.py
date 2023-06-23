@@ -56,7 +56,10 @@ class One_to_one:
     else: 
       include_mtl = False
     
-    ymax = params[f'ymax_ds{ds_index}'].value
+    if self.params_definitions['ymax'].user_data['type']=='local_dataset':
+      ymax = params[f'ymax_ds{ds_index}'].value
+    else:
+      ymax = params[f'ymax'].value
     Abulk = c0
 
     #ODE system
@@ -109,11 +112,18 @@ class Bivalent_analyte:
     return self.name
 
   def ydot(self, t, y, params, c0, ds_index):
+
+
     ka1 = params['ka1'].value
     kd1 = params['kd1'].value
     ka2 = params['ka2'].value
     kd2 = params['kd2'].value
-    ymax = params[f'ymax_ds{ds_index}'].value
+    
+    if self.params_definitions['ymax'].user_data['type']=='local_dataset':
+      ymax = params[f'ymax_ds{ds_index}'].value
+    else:
+      ymax = params[f'ymax'].value
+
     if 'kt' in params: 
       include_mtl = True
       kt = params['kt'].value
@@ -228,8 +238,17 @@ class Heterogeneous_ligand:
     kd1 = params['kd1'].value
     ka2 = params['ka2'].value
     kd2 = params['kd2'].value
-    ymax1 = params[f'ymax1_ds{ds_index}'].value
-    ymax2 = params[f'ymax2_ds{ds_index}'].value
+    
+    if self.params_definitions['ymax1'].user_data['type']=='local_dataset':
+      ymax1 = params[f'ymax1_ds{ds_index}'].value
+    else:
+      ymax1 = params[f'ymax1'].value
+    
+    if self.params_definitions['ymax2'].user_data['type']=='local_dataset':
+      ymax2 = params[f'ymax2_ds{ds_index}'].value
+    else:
+      ymax2 = params[f'ymax2'].value
+
     if 'kt' in params: 
       include_mtl = True
       kt = params['kt'].value
@@ -439,7 +458,7 @@ def create_params(exp, model, mtl = False, offsets = False, ymax = 'local_datase
     if par.name == 'offset' and offsets == False: continue
     if 'ymax' in parname and ymax != 'local_dataset':
       if ymax not in ['global', 'local_dataset']:
-        raise ValueError('ymax can only be fitted globaly or localy')
+        raise ValueError('ymax can only be fitted globally or localy')
       par.user_data['type'] = ymax
 
 
