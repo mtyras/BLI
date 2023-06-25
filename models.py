@@ -177,7 +177,10 @@ class Two_state:
     kd1 = params['kd1'].value
     ka2 = params['ka2'].value
     kd2 = params['kd2'].value
-    ymax = params[f'ymax_ds{ds_index}'].value
+    if self.params_definitions['ymax'].user_data['type']=='local_dataset':
+      ymax = params[f'ymax_ds{ds_index}'].value
+    else:
+      ymax = params[f'ymax'].value
     
     if 'kt' in params: 
       include_mtl = True
@@ -225,9 +228,9 @@ class Heterogeneous_ligand:
       'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
       'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
-      'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = -1000, min = 0, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
 
   def __repr__(self):
