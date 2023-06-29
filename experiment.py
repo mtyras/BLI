@@ -724,6 +724,20 @@ class Exp:
 
         #df = df[[col for col in df if 'ds' in col]] #discard 'steps' column
 
+  def summary(self):
+    if self.params is not None:
+      params = self.params
+      s = [] 
+      s.append(f"ka: {params['ka'].value:.4E}\n")
+      s.append(f"kd: {params['kd'].value:.4E}\n")
+      if 'kt' in params:
+        s.append(f"kt: {params['kt'].value:.4E}\n")
+      s.append(f"KD:{params['kd'].value/params['ka'].value:.4E}\n")
+      y = np.var(np.concatenate([dataset.response for dataset in self.datasets]).flatten(), ddof=2)
+      s.append(f"R²: {1 - self.result.redchi / y:.4f}\n")
+      s.append(f"chi²: {self.result.chisqr}\n")
+      s.append(f"reduced chi²: {self.result.redchi}\n")
+      return ''.join(s)
 
 
 if __name__ == '__main__': 

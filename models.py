@@ -89,6 +89,13 @@ class Bivalent_analyte:
 # rate constants can be compared and: ka2 = ka2 * 100 * MW(A) (Karlsson 1995)
 # ka2 (M-1s-1) = ka2 (RU-1 s-1) * Mr * 100 via Karlsson, R., J. A. Mo and R. Holmdahl, JImmMeth 1995
 
+# To calculate Kd from the kinetic rates, you need to consider the equilibrium constants for each binding step: 
+# K 1 = k a1 / k d1 and K 2 = k a2 / k d2. 
+# The overall equilibrium constant for the bivalent analyte model is 
+# K D = K 1 * K 2. 
+# Therefore, you can calculate Kd by multiplying the inverse of the equilibrium constants for each binding step: 
+# Kd = 1 / (K 1 * K 2) = (k d1 * k d2) / (k a1 * k a2)
+
   name = 'Bivalent analyte'
   latex = r'''
           A_{bulk} \underset{kt}{\stackrel{kt}{\rightleftharpoons}} A_{surf}
@@ -225,8 +232,8 @@ class Heterogeneous_ligand:
     self.params_definitions = {
       'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
       'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
-      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
-      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
       'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
@@ -283,7 +290,7 @@ class Heterogeneous_ligand:
 
 
 class Bivalent_ligand:
-  name = 'One to two'
+  name = 'Bivalent ligand'
   latex = r'''
   L + A = LA
   LA + A = LAA
@@ -352,14 +359,14 @@ class Triple_sites:
     self.params_definitions = {
       'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
       'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
-      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
-      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
-      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e+04, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
-      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
-      'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'ymax3' : Parameter(name = 'ymax3', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'ymax3' : Parameter(name = 'ymax3', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
       'offset' : Parameter(name = 'offset', vary = True, value = -1, min = 0, max = 1, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
 
@@ -413,10 +420,10 @@ class Trivalent_ligand:
     self.params_definitions = {
       'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
       'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
-      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
-      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
-      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
-      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e-02, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': ''}),
+      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e-02, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': ''}),
+      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': ''}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
       'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
@@ -448,7 +455,7 @@ class Trivalent_ligand:
     
     return [dLA, dLAA, dLAAA]
 
-def create_params(exp, model, mtl = False, offsets = False, ymax = 'local_dataset'):
+def create_params(exp, model, mtl = False, offsets = False, define_ymax = 'local_dataset'):
   """Returns params for a given model \
       must receive info on exp structure including number of datasets and steps."""
           
@@ -459,10 +466,10 @@ def create_params(exp, model, mtl = False, offsets = False, ymax = 'local_datase
   for parname, par in params_definitions.items():
     if par.name == 'kt' and mtl == False: continue
     if par.name == 'offset' and offsets == False: continue
-    if 'ymax' in parname and ymax != 'local_dataset':
-      if ymax not in ['global', 'local_dataset']:
+    if 'ymax' in parname and define_ymax != 'local_dataset':
+      if define_ymax not in ['global', 'local_dataset']:
         raise ValueError('ymax can only be fitted globally or localy')
-      par.user_data['type'] = ymax
+      par.user_data['type'] = define_ymax
 
 
     if par.user_data['type'] == "global":
