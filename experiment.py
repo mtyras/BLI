@@ -215,10 +215,11 @@ class Exp:
       else:
         offset = 0
       
+      
       responses = odeint(self.model.ydot, y0, t_step, args=(params, c0, dataset.index), tfirst=True, rtol=1e-12, atol=1e-12) 
       
       if i < dataset.no_steps - 1:
-        y0 = responses[-1,:].flatten() #new y0 for next step
+        y0 = responses[-1,:].flatten() #new y0 for next step 
         responses[:,0] = responses[:,0] + offset
         responses = np.sum(responses[:,0:self.model.signal_components], axis=1)
         calculated_dataset_response[mask] = responses[:-1]

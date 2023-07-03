@@ -40,7 +40,7 @@ class One_to_one:
       'kd' : Parameter(name = 'kd', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 1e-12, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
 
   def __repr__(self):
@@ -113,7 +113,7 @@ class Bivalent_analyte:
       'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
   def __repr__(self):
     return self.name
@@ -174,7 +174,7 @@ class Two_state:
       'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
   def __repr__(self):
     return self.name
@@ -306,7 +306,7 @@ class Bivalent_ligand:
       'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-07, max = 1e+07, user_data = {'type': 'global', 'units': 's-1'}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = -1000, min = 0, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
   def __repr__(self):
     return self.name
@@ -367,7 +367,7 @@ class Triple_sites:
       'ymax1' : Parameter(name = 'ymax1', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
       'ymax2' : Parameter(name = 'ymax2', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
       'ymax3' : Parameter(name = 'ymax3', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = -1, min = 0, max = 1, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
 
   def __repr__(self):
@@ -426,7 +426,7 @@ class Trivalent_ligand:
       'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': ''}),
       'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
       'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 0, max = 1000, user_data = {'type': 'local_dataset', 'units': 'RU'}),
-      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -1000, max = 1000, user_data = {'type': 'local_step', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
     }
   def __repr__(self):
     return self.name
@@ -454,6 +454,63 @@ class Trivalent_ligand:
 
     
     return [dLA, dLAA, dLAAA]
+
+
+class Test:
+  name = 'test'
+  latex = r'''
+         '''
+  no_ODEs = 4
+  signal_components = 4
+
+  def __init__(self) -> None:
+    self.params_definitions = {
+      'ka1' : Parameter(name = 'ka1', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd1' : Parameter(name = 'kd1', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka2' : Parameter(name = 'ka2', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd2' : Parameter(name = 'kd2', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'ka3' : Parameter(name = 'ka3', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kd3' : Parameter(name = 'kd3', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'kas' : Parameter(name = 'kas', vary = True, value = 1e+04, min = 1e+01, max = 1e+07, user_data = {'type': 'global', 'units': 'M-1s-1'}),
+      'kds' : Parameter(name = 'kds', vary = True, value = 1e-02, min = 1e-06, max = 1e-01, user_data = {'type': 'global', 'units': 's-1'}),
+      'kt' : Parameter(name = 'kt', vary = True, value = 1e+07, min = 1e+01, max = 1e+12, user_data = {'type': 'global', 'units': 'RU M-1s-1'}),
+      'ymax' : Parameter(name = 'ymax', vary = True, value = 1, min = 1e-12, max = 10, user_data = {'type': 'local_dataset', 'units': 'RU'}),
+      'offset' : Parameter(name = 'offset', vary = True, value = 0, min = -10, max = 10, user_data = {'type': 'local_step', 'units': 'RU'}),
+    }
+
+  def __repr__(self):
+    return self.name
+
+  def ydot(self, t, y, params, c0, ds_index):
+    ka1 = params['ka1'].value
+    kd1 = params['kd1'].value
+    ka2 = params['ka2'].value
+    kd2 = params['kd2'].value
+    ka3 = params['ka3'].value
+    kd3 = params['kd3'].value
+    kas = params['kas'].value
+    kds = params['kds'].value
+
+    if self.params_definitions['ymax'].user_data['type']=='local_dataset':
+      ymax = params[f'ymax_ds{ds_index}'].value
+    else:
+      ymax = params[f'ymax'].value
+    
+    if 'kt' in params: 
+      raise(ValueError, 'kt not available in this model')
+    Abulk = c0
+
+    
+    [LA, LAA, LAAA, LAAs] = y
+    L = ymax - LA - LAA - LAAA - LAAs
+    
+    dLA = ka1*L*Abulk - kd1*LA +kd2*LAA - ka2*LA*Abulk
+    dLAA = ka2*LA*Abulk - kd2*LAA - kas*LAA + kds*LAAs + kd3*LAA - ka3*LAA*Abulk
+    dLAAs = kas*LAA - kds*LAAs
+    dLAAA = ka3*LAA*Abulk - kd3*LAAA
+
+    
+    return [dLA, dLAA, LAAA, dLAAs]
 
 def create_params(exp, model, mtl = False, offsets = False, define_ymax = 'local_dataset'):
   """Returns params for a given model \
